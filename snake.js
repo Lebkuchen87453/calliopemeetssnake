@@ -1,39 +1,49 @@
-// COPY THIS TO HTTP://MAKECODE.CALLIOPE.CC/
+/*
+ * Snake for Calliopes
+ * by Kilian Friedrich
+ *
+ * 2019-07-03
+ */
 
-let snake: Array<number>[];
+basic.showString("3 2 1");
 
+let snake = [[2, 2, 0], [1, 2, 0]];
 let appleX: number;
 let appleY: number;
 
-function startGameLoop() {
 
-    while (isAlive()) {
+newApple();
+render();
+while (isAlive()) {
 
         basic.pause(700);
         basic.clearScreen();
 
         moveSnake();
-        checkApple();
-        renderSnake();
 
-        led.toggle(appleX, appleY);
+        if(appleX === snake[0][0] && appleY === snake[0][1]) {
 
-    }
+            appendToSnake();
+            newApple();
+
+        }
+
+        render();
 
 }
 
-function checkApple() {
+basic.showString("Game over");
 
-    if (appleX !== snake[0][0] || appleY !== snake[0][1]) return;
+// ########## METHODS ##########
 
-    appendToSnake();
+function newApple() {
 
-    while (snakeCoversApple()) {
+    do {
 
         appleX = Math.random(5);
         appleY = Math.random(5);
 
-    }
+    } while(snakeCoversApple());
 
 
 }
@@ -48,26 +58,21 @@ function snakeCoversApple() {
 
 }
 
-function renderSnake(index = 0) {
+function render(index = 0) {
 
-    if (index === snake.length) return;
+    if (index === snake.length) {
+
+        led.toggle(appleX, appleY);
+        return;
+
+    }
 
     led.toggle(snake[index][0], snake[index][1]);
-    renderSnake(index + 1);
+    render(index + 1);
 
 }
 
-function launch() {
 
-    basic.showString("3 2 1");
-
-    snake = [[2, 2, 0], [1, 2, 0]];
-
-    startGameLoop();
-
-    basic.showString("Game Over");
-
-}
 
 function isAlive() {
 
@@ -111,37 +116,29 @@ function moveSnake() {
 function moveRight() {
 
     snake[0][2] = 0;
-    snake[0][0]++;
-
-    movePart(0)
+    move()
 
 }
 function moveDown() {
 
     snake[0][2] = 1;
-    snake[0][1]++;
-
-    movePart(1)
+    move()
 
 }
 function moveLeft() {
 
     snake[0][2] = 2;
-    snake[0][0]--;
-
-    movePart(2)
+    move()
 
 }
 function moveUp() {
 
     snake[0][2] = 3;
-    snake[0][1]--;
-
-    movePart(3)
+    move()
 
 }
 
-function movePart(direction: number, index: number = 1) {
+function move(direction: number = -1, index: number = 0) {
 
     if (index === snake.length) return;
 
@@ -154,7 +151,7 @@ function movePart(direction: number, index: number = 1) {
 
     }
 
-    movePart(snake[index][2], index + 1);
+    move(snake[index][2], index + 1);
 
     snake[index][2] = direction;
 
@@ -180,5 +177,3 @@ function getTiltToLeft() { return Math.abs(getXRotation()) === 180 ? 0 : (getXRo
 function getTiltToRight() { return Math.abs(getXRotation()) === 180 ? 0 : (getXRotation() > 0 ? -getXRotation() + 180 : -getXRotation() - 180) }
 function getTiltToTop() { return Math.abs(getYRotation()) === 180 ? 0 : -getYRotation() }
 function getTiltToBottom() { return Math.abs(getYRotation()) === 180 ? 0 : getYRotation() }
-
-launch();
