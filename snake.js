@@ -17,7 +17,6 @@ render();
 while (isAlive()) {
 
         basic.pause(700);
-        basic.clearScreen();
 
         moveSnake();
 
@@ -28,6 +27,7 @@ while (isAlive()) {
 
         }
 
+        basic.clearScreen();
         render();
 
 }
