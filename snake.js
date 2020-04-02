@@ -16,7 +16,6 @@ basic.showString("3 2 1");  // countdown, showString pauses the program until th
  */
 let snake = [[2, 2, 0], [1, 2, 0]];
 
-
 let appleX: number;  // x position of the apple
 let appleY: number;  // y position of the apple
 newApple();  // initialize apple
